@@ -3,13 +3,11 @@
 -- =========================
 CREATE TABLE users (
     id UUID PRIMARY KEY,
-    -- Supabase Auth user ID (auth.uid())
 
     email VARCHAR(150) UNIQUE NOT NULL,
     name VARCHAR(100),
 
-    provider VARCHAR(50) DEFAULT 'google',
-    -- 'google', 'github', etc (from Supabase OAuth providers)
+    password_hash VARCHAR(255) NOT NULL,
 
     role VARCHAR(20) DEFAULT 'user',
     -- user | admin
@@ -17,9 +15,8 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     -- DESIGN DECISION:
-    -- Authentication is fully handled by Supabase Auth (OAuth).
-    -- This table only stores application-level user metadata.
-    -- No password field is used because OAuth handles identity securely.
+    -- Authentication is now fully handled internally.
+    -- Passwords must be hashed (bcrypt/argon2), never stored raw.
 );
 
 -- =========================

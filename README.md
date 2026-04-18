@@ -47,8 +47,7 @@ php artisan serve
 ```
 
 ## Related Links
-[Figma Prototype](https://www.figma.com/make/65s1RP1XCMI240CX44rtsn/E-Commerce-Store-for-Tech?p=f&t=CN4F0wjTQKSKtIyH-0)
-
+[Figma Prototype](https://www.figma.com/make/65s1RP1XCMI240CX44rtsn/E-Commerce-Store-for-Tech?p=f&t=CN4F0wjTQKSKtIyH-0) | 
 [Google Doc](https://docs.google.com/document/d/1mdx5yPjPTyAJ9lKZSOSAVE83FUZbyLBeJlMZHImdl1I/edit?tab=t.0)
 
 ## Contributors
@@ -58,27 +57,27 @@ php artisan serve
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/162527652?v=4" width="80" style="border-radius:50%;" /><br/>
       <b>SHUBARUUU</b><br/>
-      <small>Core developer / system logic</small>
+      <small>API Backend </small>
     </td>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/201718391?v=4" width="80" style="border-radius:50%;" /><br/>
       <b>Dekxisosta</b><br/>
-      <small>Frontend / UI implementation</small>
+      <small>Frontend / UI</small>
     </td>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/152399880?v=4" width="80" style="border-radius:50%;" /><br/>
-      <b>rjtchn</b><br/>
-      <small>Backend / API integration</small>
+        <img src="https://avatars.githubusercontent.com/u/152399880?v=4" width="80" style="border-radius:50%;" /><br/>
+        <b>rjtchn</b><br/>
+        <small>Auth / Security</small>
     </td>
     <td align="center">
       <img src="https://ui-avatars.com/api/?name=Mathigy" width="80" style="border-radius:50%;" /><br/>
       <b>Mathigy</b><br/>
-      <small>Design / UI concepts</small>
+      <small>Design / Docu</small>
     </td>
     <td align="center">
       <img src="https://ui-avatars.com/api/?name=Kim" width="80" style="border-radius:50%;" /><br/>
       <b>Kim</b><br/>
-      <small>Testing / documentation</small>
+      <small>Testing / Docu</small>
     </td>
   </tr>
 </table>

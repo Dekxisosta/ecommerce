@@ -1,0 +1,132 @@
+-- =========================
+-- USERS
+-- =========================
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    -- Supabase Auth user ID (auth.uid())
+
+    email VARCHAR(150) UNIQUE NOT NULL,
+    name VARCHAR(100),
+
+    provider VARCHAR(50) DEFAULT 'google',
+    -- 'google', 'github', etc (from Supabase OAuth providers)
+
+    role VARCHAR(20) DEFAULT 'user',
+    -- user | admin
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    -- DESIGN DECISION:
+    -- Authentication is fully handled by Supabase Auth (OAuth).
+    -- This table only stores application-level user metadata.
+    -- No password field is used because OAuth handles identity securely.
+);
+
+-- =========================
+-- CATEGORIES
+-- =========================
+CREATE TABLE categories (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(120) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- DESIGN DECISION:
+    -- Flat category structure for MVP simplicity.
+    -- No nested categories to reduce query complexity.
+);
+
+-- =========================
+-- PRODUCTS
+-- =========================
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+
+    price DECIMAL(10,2) NOT NULL,
+    discount INT DEFAULT NULL,
+
+    rating DECIMAL(2,1) DEFAULT 0,
+    reviews_count INT DEFAULT 0,
+    sold INT DEFAULT 0,
+    stock INT DEFAULT 0,
+
+    brand VARCHAR(100),
+    sku VARCHAR(100) UNIQUE,
+
+    weight DECIMAL(6,2),
+
+    width DECIMAL(6,2),
+    height DECIMAL(6,2),
+    depth DECIMAL(6,2),
+
+    shipping_from VARCHAR(150),
+    shipping_fee DECIMAL(10,2),
+    shipping_days VARCHAR(20),
+
+    image TEXT,
+    hover_image TEXT NULL,
+
+    pill VARCHAR(50) NULL,
+    -- e.g. trending | bestseller | new
+
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+    -- DESIGN DECISION:
+    -- Variants and shipping logic are flattened for MVP simplicity.
+    -- Image URLs are stored from Supabase Storage (no backend file handling).
+);
+
+-- =========================
+-- ORDERS
+-- =========================
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+
+    user_id UUID,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+
+    total_amount DECIMAL(10,2) NOT NULL,
+
+    status VARCHAR(30) DEFAULT 'pending',
+    -- pending | paid | shipped | completed | cancelled
+
+    payment_method VARCHAR(50),
+    -- cod | card | etc
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- DESIGN DECISION:
+    -- Orders act as immutable transaction records.
+    -- Total amount is stored to avoid recalculation from product prices later.
+);
+
+-- =========================
+-- ORDER ITEMS
+-- =========================
+CREATE TABLE order_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+
+    order_id INT,
+    product_id INT,
+
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+
+    product_name VARCHAR(255),
+    product_price DECIMAL(10,2),
+
+    quantity INT NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    -- DESIGN DECISION:
+    -- This is the implicit MANY-TO-MANY bridge between users and products.
+    -- Snapshot fields preserve historical accuracy even if product data changes later.
+);

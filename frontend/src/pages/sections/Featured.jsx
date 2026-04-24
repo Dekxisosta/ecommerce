@@ -1,5 +1,5 @@
-import { useProducts } from "../../features/products/hooks/useProducts.js";
-import ProductGrid from "../components/FeaturedGrid.jsx";
+import { useProducts } from "../../shared/hooks/useProducts.js";
+import { FeaturedGrid } from "../components";
 import { ArrowRight } from "lucide-react";
 
 export default function Featured() {

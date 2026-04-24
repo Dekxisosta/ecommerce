@@ -1,4 +1,4 @@
-export default function Login() {
+export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-sm p-6 border rounded-xl space-y-4">

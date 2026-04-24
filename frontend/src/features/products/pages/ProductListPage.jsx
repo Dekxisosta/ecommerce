@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import Card from "../../../shared/components/ui/Card.jsx";
-import Chip from "../components/Chip.jsx";
-import SkeletonGrid from "../components/SkeletonGrid.jsx";
-import CategoryPills from "../components/CategoryPills.jsx";
-import Pagination from "../components/Pagination.jsx";
-import { useProducts } from "../hooks/useProducts.js";
-import ErrorComponent from "../../../shared/components/ui/ErrorComponent.jsx"
+import { Chip, SkeletonGrid, CategoryPills, Pagination } from "../components";
+import { useProducts, ErrorComponent, Card } from "../../../shared";
 
 const slugify = (text) =>
   text

@@ -1,4 +1,4 @@
-import Card from "../../shared/components/ui/Card.jsx";
+import {Card} from "../../shared";
 
 export default function FeaturedGrid({ products }) {
   return (

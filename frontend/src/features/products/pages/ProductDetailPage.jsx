@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Reviews from "../sections/Reviews.jsx";
+import {Reviews} from "../sections";
 import products from "../../../data/products.json";
 
 const formatSold = (num) => {

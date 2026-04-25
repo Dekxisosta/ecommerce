@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+import { useTheme } from "../../../shared"; 
+
 import cart from "../../../assets/images/cart.png";
 import user from "../../../test/mock-profile.gif";
 import logo_light from "../../../assets/images/logo-light.png";
-import logo_dark from "../../../assets/images/logo-dark.png"
+import logo_dark from "../../../assets/images/logo-dark.png";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "light"
-  );
   const [scrolled, setScrolled] = useState(false);
+
+  const { theme, toggleTheme } = useTheme();
 
   const hamburgerRef = useRef(null);
   const menuRef = useRef(null);
@@ -20,13 +21,8 @@ export default function Navbar() {
   const navLinks = [
     { to: "/", label: "Home" },
     { to: "/products", label: "Products" },
-    { to: "/about", label: "About" }
+    { to: "/about", label: "About" },
   ];
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -36,7 +32,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-  if (
+      if (
         menuRef.current &&
         !menuRef.current.contains(e.target) &&
         hamburgerRef.current &&
@@ -83,7 +79,7 @@ export default function Navbar() {
           </Link>
           <span style={{ color: "var(--color-border)" }}>|</span>
           <button
-            onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+            onClick={toggleTheme}
             className="transition hover:opacity-100 opacity-60 text-xs"
             style={{ color: "var(--color-text)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
@@ -159,7 +155,6 @@ export default function Navbar() {
 
           {/* RIGHT ACTIONS */}
           <div className="hidden md:flex items-center gap-3 ml-auto">
-            {/* Cart with badge */}
             <Link to="/cart" className="relative p-1">
               <img src={cart} className="w-7 h-7" alt="cart" />
               <span
@@ -172,8 +167,6 @@ export default function Navbar() {
                 3
               </span>
             </Link>
-
-            {/* User — far right */}
             <Link to="/profile">
               <img
                 src={user}
@@ -182,7 +175,7 @@ export default function Navbar() {
               />
             </Link>
           </div>
-          
+
           {/* MOBILE HAMBURGER */}
           <div className="md:hidden ml-auto flex items-center gap-3">
             <Link to="/profile">
@@ -206,9 +199,8 @@ export default function Navbar() {
               ))}
             </button>
           </div>
-          
+
         </div>
-        
       </div>
 
       {/* MOBILE MENU */}
@@ -256,7 +248,6 @@ export default function Navbar() {
             style={{ color: "var(--color-primary)" }}>
             Sign Up
           </Link>
-
         </div>
       </div>
     </nav>

@@ -81,3 +81,9 @@ php artisan serve
     </td>
   </tr>
 </table>
+
+## Disclaimer
+
+This website is not affiliated with, endorsed by, or associated with HoYoverse or miHoYo in any way.
+All HoYoverse-related imagery, characters, and assets used on this site are the intellectual property of HoYoverse / miHoYo Co., Ltd.
+and are used solely for design portfolio and showcase purposes. No commercial use is intended.

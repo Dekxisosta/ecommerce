@@ -23,8 +23,8 @@ No clutter, no noise, just a focused interface and curated products.
 ### Clone the repository
 
 ```bash id="6v9q0c"
-git clone https://github.com/Dekxisosta/zelphyra-collective.git
-cd zelphyra-collective
+git clone https://github.com/Dekxisosta/zenless-collective.git
+cd zenless-collective
 ```
 
 ### Frontend

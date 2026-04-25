@@ -10,6 +10,7 @@ export default function Background() {
         backgroundSize: "40px 40px",
         opacity: 0.4,
         transform: "rotate(-12deg) scale(1.4)",
+        animation: "bgDrift 20s ease-in-out infinite alternate",
       }}
     />
   );

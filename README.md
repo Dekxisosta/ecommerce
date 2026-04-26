@@ -1,7 +1,6 @@
 
 <img src="/assets/images/logo-dark.png" width="260px"/>
 
-
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=000000)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=ffffff)
 ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=ffffff)
@@ -39,12 +38,9 @@ This project was built to explore and practice real-world full-stack development
 API mocking with MSW during frontend development, server state management with TanStack Query,
 and clean UI composition with TailwindCSS and Lucide React.
 
----
-![WebpageMockImage](/assets/images/hero-preview.png)
+
 ---
 ![WebpageMockImage](/assets/images/dashboard-preview.png)
----
-![WebpageMockImage](/assets/images/signup-preview.png)
 ---
 
 ## Contributors
@@ -82,24 +78,26 @@ and clean UI composition with TailwindCSS and Lucide React.
 ## Features
  
 ### Admin
-| # | Feature | Description |
-|---|---------|-------------|
-| 1 | Dashboard | Overview of key metrics and store statistics |
-| 2 | Inventory Management | Track and manage product stock levels |
-| 3 | Product Management | Add, edit, and manage product listings |
-| 4 | Order Management | View and process incoming orders |
-| 5 | Order History | View past and completed orders |
-| 6 | Payment Management | Track and manage payment records |
-| 7 | Customer Management | View and manage customer accounts |
-| 8 | Customer Cart | Monitor customer cart activity |
-| 9 | Customer Order History | View order history per individual customer |
- 
+
+| # | Feature | Description | Route | Endpoint |
+|---|---------|-------------|-------|----------|
+| 1 | Dashboard | Overview of key metrics and store statistics | `/admin/dashboard` | `GET /api/admin/dashboard` |
+| 2 | Inventory Management | Track and manage product stock levels | `/admin/inventory` | `GET /api/admin/inventory` |
+| 3 | Product Management | Add, edit, and manage product listings | `/admin/products` | `GET /api/admin/products` `POST /api/admin/products` `PUT /api/admin/products/:id` `DELETE /api/admin/products/:id` |
+| 4 | Order Management | View and process incoming orders | `/admin/orders` | `GET /api/admin/orders` `PATCH /api/admin/orders/:id/status` |
+| 5 | Order History | View past and completed orders | `/admin/orders/history` | `GET /api/admin/orders/history` |
+| 6 | Payment Management | Track and manage payment records | `/admin/payments` | `GET /api/admin/payments` `GET /api/admin/payments/:id` |
+| 7 | Customer Management | View and manage customer accounts | `/admin/customers` | `GET /api/admin/customers` `GET /api/admin/customers/:id` `DELETE /api/admin/customers/:id` |
+| 8 | Customer Cart | Monitor customer cart activity | `/admin/customers/:id/cart` | `GET /api/admin/customers/:id/cart` |
+| 9 | Customer Order History | View order history per individual customer | `/admin/customers/:id/orders` | `GET /api/admin/customers/:id/orders` |
+
 ### User
-| # | Feature | Description |
-|---|---------|-------------|
-| 1 | Products Page | Browse all available products |
-| 2 | Product Detail | View detailed information of a single product |
-| 3 | Category Filter | Filter products by category |
+
+| # | Feature | Description | Route | Endpoint |
+|---|---------|-------------|-------|----------|
+| 1 | Products Page | Browse all available products | `/products` | `GET /api/products` |
+| 2 | Product Detail | View detailed information of a single product | `/products/:id` | `GET /api/products/:id` |
+| 3 | Category Filter | Filter products by category | `/products?category=:slug` | `GET /api/products?category=:slug` |
  
 ---
 

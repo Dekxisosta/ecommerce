@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { authService } from "../hooks/authService";
 
 const AuthContext = createContext(null);
 
@@ -10,19 +11,12 @@ export function AuthProvider({ children }) {
     verify();
   }, []);
 
+  // Checks if user is logged in on page load/refresh
   const verify = async () => {
     try {
-      const res = await fetch("/api/auth/me", {
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        setUser(null);
-        return;
-      }
-
-      const data = await res.json();
-      setUser(data);
+      const data = await authService.me();
+      // Laravel returns { message, user: { id, name, email, role, ... } }
+      setUser(data?.user ?? null);
     } catch {
       setUser(null);
     } finally {
@@ -31,33 +25,25 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (email, password) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    // Laravel login returns { message } only, then we fetch the user
+    await authService.login(email, password);
+    const data = await authService.me();
+    setUser(data?.user ?? null);
+  };
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || "Login failed");
-    }
-
-    const data = await res.json();
-    setUser(data.user);
-    return data;
+  const signup = async (name, email, password) => {
+    // Laravel register returns { message } only, then we log in
+    await authService.signup(name, email, password);
+    await login(email, password);
   };
 
   const logout = async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
+    await authService.logout();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, verify }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, verify }}>
       {children}
     </AuthContext.Provider>
   );

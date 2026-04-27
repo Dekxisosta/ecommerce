@@ -15,10 +15,12 @@ const savedTheme = localStorage.getItem("theme") || "light";
 document.documentElement.setAttribute("data-theme", savedTheme);
 
 async function enableMocking() {
-  if (import.meta.env.DEV) {
-    const { worker } = await import("./mocks/browser")
-    await worker.start({ onUnhandledRequest: "bypass" })
-  }
+  // if (import.meta.env.DEV) {
+  //   const { worker } = await import("./mocks/browser")
+  //   await worker.start({ onUnhandledRequest: "bypass" })
+  // }
+
+  // MSW disabled - using real Laravel backend
 }
 
 enableMocking().then(() => {

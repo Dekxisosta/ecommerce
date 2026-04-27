@@ -24,7 +24,7 @@ const STRENGTH_META = [
 ];
 
 export default function SignupPage() {
-    const { login }  = useAuth();
+    const { signup }  = useAuth();
     const navigate   = useNavigate();
 
     const [form, setForm] = useState({
@@ -60,51 +60,30 @@ export default function SignupPage() {
         return null;
     }
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setError("");
+   async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
 
-        const validationError = validate();
-        if (validationError) {
-            setError(validationError);
-            return;
-        }
-
-        setLoading(true);
-        try {
-            // Fetch CSRF token before POST
-            await fetch("/sanctum/csrf-cookie", { credentials: "include" });
-
-            const res = await fetch("/api/register", {
-                method:      "POST",
-                credentials: "include",
-                headers:     { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name:                  form.name.trim(),
-                    email:                 form.email.trim(),
-                    password:              form.password,
-                    password_confirmation: form.password_confirmation,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                const firstError = data.errors
-                    ? Object.values(data.errors)[0][0]
-                    : data.message;
-                throw new Error(firstError || "Registration failed.");
-            }
-
-            // Auto login after successful registration
-            await login(form.email.trim(), form.password);
-            navigate("/");
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+    const validationError = validate();
+    if (validationError) {
+        setError(validationError);
+        return;
     }
+
+    setLoading(true);
+    try {
+        await signup(
+            form.name.trim(),
+            form.email.trim(),
+            form.password
+        );
+        navigate("/");
+    } catch (err) {
+        setError(err.message || "Registration failed.");
+    } finally {
+        setLoading(false);
+    }
+}
 
     return (
         <div className="auth-layout">

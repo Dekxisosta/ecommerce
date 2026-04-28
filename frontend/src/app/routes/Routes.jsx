@@ -16,6 +16,7 @@ import { Returns } from "../../features/returns";
 import { DataPolicy } from "../../features/policy";
 import { TermsOfService } from "../../features/tos";
 import { ContactPage } from "../../features/contact";
+import { CheckoutPage } from "../../features/checkout";
 
 import {
   DashboardPage, ProductsAdminPage, InventoryPage,
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
           { path: "returns",                   element: <Returns /> },
           { path: "privacy-policy",            element: <DataPolicy /> },
           { path: "terms-of-service",          element: <TermsOfService /> },
+          { path: "checkout",                  element: <CheckoutPage /> },
           { path: "*",                         element: <ErrorComponent type="NOT_FOUND" /> },
         ],
       },

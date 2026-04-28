@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Pill from "./Pill.jsx";
 import { useProfile } from "../../../features/profile";
+import { useCart } from "../../../shared";
 
 const slugify = (text) =>
   text
@@ -32,7 +33,9 @@ const getStockStatus = (stock) => {
 
 export default function Card({ product }) {
   const [wished, setWished] = useState(false);
-  const { profile } = useProfile();
+  const [adding, setAdding] = useState(false);
+  const { profile, loading: profileLoading } = useProfile();
+  const { addItem } = useCart();
   const navigate = useNavigate();
 
   const primaryImage = product.images?.find(img => img.is_primary)?.url ?? null;
@@ -46,15 +49,22 @@ export default function Card({ product }) {
 
   const resolvedPill = product.pill ?? null;
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isSoldOut) return;
+    if (isSoldOut || adding) return;
+    if (profileLoading) return;
     if (!profile) {
       navigate("/login");
       return;
     }
-    
+
+    setAdding(true);
+    try {
+      await addItem(product.id, 1);
+    } finally {
+      setAdding(false);
+    }
   };
 
   return (
@@ -248,13 +258,17 @@ export default function Card({ product }) {
 
           <div className="flex items-center gap-2">
             <button
-              disabled={isSoldOut}
+              disabled={isSoldOut || adding || profileLoading}
               onClick={handleAddToCart}
               className={`flex items-center gap-1.5 text-xs font-bold transition-all duration-200 active:scale-95 ${
-                isSoldOut ? "cursor-not-allowed" : "hover:brightness-110"
+                isSoldOut || adding ? "cursor-not-allowed" : "hover:brightness-110"
               }`}
               style={{
-                background: isSoldOut ? "var(--color-text-subtle)" : "var(--color-primary)",
+                background: isSoldOut
+                  ? "var(--color-text-subtle)"
+                  : adding
+                  ? "color-mix(in srgb, var(--color-primary) 70%, transparent)"
+                  : "var(--color-primary)",
                 color: "var(--hero-text)",
                 clipPath: "polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)",
                 paddingTop: "7px",
@@ -262,13 +276,14 @@ export default function Card({ product }) {
                 paddingLeft: "16px",
                 paddingRight: "16px",
                 borderRadius: "var(--radius)",
-                boxShadow: isSoldOut
+                boxShadow: isSoldOut || adding
                   ? "none"
                   : "0 4px 12px color-mix(in srgb, var(--color-primary) 50%, transparent)",
+                transition: "background 0.2s, box-shadow 0.2s",
               }}
             >
-              <ShoppingCart className="w-3.5 h-3.5" />
-              {isSoldOut ? "Sold" : "Add"}
+              <ShoppingCart className={`w-3.5 h-3.5 ${adding ? "animate-bounce" : ""}`} />
+              {isSoldOut ? "Sold" : adding ? "Adding…" : "Add"}
             </button>
           </div>
         </div>

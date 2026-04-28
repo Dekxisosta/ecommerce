@@ -20,7 +20,7 @@
   /* States */
   --color-success: #22c55e;
   --color-warning: #facc15;
-  --color-danger: #ef4444;
+  --color-price: #d97706;
 
   --hero-primary: #ec9728;
   --hero-secondary: #18181b;
@@ -50,7 +50,7 @@
 
   --color-success: #4ade80;
   --color-warning: #fde047;
-  --color-danger: #f87171;
+  --color-price: #d97706;
 
   --color-disabled: #4b5563;
   --color-disabled-text: #6b7280;

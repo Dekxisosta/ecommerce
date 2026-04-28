@@ -131,7 +131,8 @@ const Footer = () => {
             />
 
             <button
-              className="w-full py-3 rounded-xl font-semibold transition-opacity hover:opacity-90"
+            disabled
+              className="w-full py-3 rounded-xl font-semibold transition-opacity "
               style={{
                 backgroundColor: "var(--color-primary)",
                 color: "white",

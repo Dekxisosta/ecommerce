@@ -6,10 +6,10 @@ import { ProfileSection, AddressSection, SecuritySection } from "../sections";
 import { useProfile } from "../context";
 import { RetryComponent } from "../../../shared";
 import avatars from "../../../data/avatars.json";
-import { ShoppingCart, Heart, Pencil, ShieldCheck } from "lucide-react";
+import { ShoppingCart, Heart, Pencil, ShieldCheck, LogOut } from "lucide-react";
 
 export default function ProfilePage() {
-  const { user }    = useAuth()   // used for role-gated admin button
+  const { user, logout } = useAuth()
   const navigate    = useNavigate()
   const [pickerOpen, setPickerOpen] = useState(false)
 
@@ -130,6 +130,18 @@ export default function ProfilePage() {
           <span className="flex items-center justify-center px-1.5 rounded-full text-[11px] font-semibold"
             style={{ background: "rgba(255,255,255,0.25)" }}>
           </span>
+      </button>
+      <button
+        onClick={logout}
+        className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-medium transition-colors"
+        style={{
+          background: "color-mix(in srgb, #ef4444 10%, transparent)",
+          color: "#ef4444",
+          border: "0.5px solid color-mix(in srgb, #ef4444 25%, transparent)",
+        }}
+      >
+        <LogOut size={14} />
+        Logout
       </button>
     </div>
   </div>

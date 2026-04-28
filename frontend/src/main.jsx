@@ -6,6 +6,7 @@ import { router } from "./app/routes/Routes.jsx";
 import { ProfileProvider } from "./features/profile/context/ProfileContext";
 import { ThemeProvider } from "./features/theme";
 import { AuthProvider } from "./features/auth";
+import { CartProvider } from "./features/cart";
 
 import "./stylesheets/index.css";
 
@@ -28,7 +29,9 @@ enableMocking().then(() => {
         <ThemeProvider>
           <AuthProvider>
             <ProfileProvider>
-              <RouterProvider router={router} />
+              <CartProvider>
+                <RouterProvider router={router} />
+              </CartProvider>
             </ProfileProvider>
           </AuthProvider>
         </ThemeProvider>

@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export function useCart() {
+// ── Context ───────────────────────────────────────────────────────────────────
+const CartContext = createContext(null);
+
+// ── Provider ──────────────────────────────────────────────────────────────────
+export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ── Fetch ─────────────────────────────────────────────────────────────────
-  // GET /api/cart — auto-creates cart if none exists
+  // ── Fetch ───────────────────────────────────────────────────────────────
   const fetchCart = async () => {
     setLoading(true);
     setError(null);
@@ -28,8 +31,7 @@ export function useCart() {
     fetchCart();
   }, []);
 
-  // ── Add ───────────────────────────────────────────────────────────────────
-  // POST /api/cart/items — increments qty server-side if product already exists
+  // ── Add ─────────────────────────────────────────────────────────────────
   const addItem = async (product_id, quantity = 1) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.product_id === product_id);
@@ -59,24 +61,16 @@ export function useCart() {
     }
   };
 
-  // ── Update Quantity ───────────────────────────────────────────────────────
-  // PATCH /api/cart/items/:id
+  // ── Change Qty ──────────────────────────────────────────────────────────
   const changeQty = async (itemId, delta) => {
     const item = cart.find((i) => i.id === itemId);
     if (!item) return;
 
     const newQty = item.quantity + delta;
+    if (newQty <= 0) return removeItem(itemId);
 
-    // If qty hits 0, remove instead
-    if (newQty <= 0) {
-      return removeItem(itemId);
-    }
-
-    // Optimistic update
     setCart((prev) =>
-      prev.map((i) =>
-        i.id === itemId ? { ...i, quantity: newQty } : i
-      )
+      prev.map((i) => (i.id === itemId ? { ...i, quantity: newQty } : i))
     );
 
     try {
@@ -90,14 +84,12 @@ export function useCart() {
     } catch (err) {
       console.error(err);
       setError(err.message);
-      await fetchCart(); // rollback
+      await fetchCart();
     }
   };
 
-  // ── Remove ────────────────────────────────────────────────────────────────
-  // DELETE /api/cart/items/:id
+  // ── Remove ──────────────────────────────────────────────────────────────
   const removeItem = async (itemId) => {
-    // Optimistic remove
     setCart((prev) => prev.filter((i) => i.id !== itemId));
 
     try {
@@ -109,15 +101,14 @@ export function useCart() {
     } catch (err) {
       console.error(err);
       setError(err.message);
-      await fetchCart(); // rollback
+      await fetchCart();
     }
   };
 
-  // ── Clear ─────────────────────────────────────────────────────────────────
-  // Deletes all items one by one
+  // ── Clear ───────────────────────────────────────────────────────────────
   const clearCart = async () => {
     const ids = cart.map((i) => i.id);
-    setCart([]); // optimistic
+    setCart([]);
     try {
       await Promise.all(
         ids.map((id) =>
@@ -130,27 +121,40 @@ export function useCart() {
     } catch (err) {
       console.error(err);
       setError(err.message);
-      await fetchCart(); // rollback
+      await fetchCart();
     }
   };
 
-  // ── Derived ───────────────────────────────────────────────────────────────
+  // ── Derived ─────────────────────────────────────────────────────────────
   const itemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = cart.reduce(
     (sum, i) => sum + (i.product?.price ?? 0) * i.quantity,
     0
   );
 
-  return {
-    cart,
-    loading,
-    error,
-    itemCount,
-    subtotal,
-    addItem,
-    removeItem,
-    changeQty,
-    clearCart,
-    refetch: fetchCart,
-  };
+  return (
+    <CartContext.Provider
+      value={{
+        cart,
+        loading,
+        error,
+        itemCount,
+        subtotal,
+        addItem,
+        removeItem,
+        changeQty,
+        clearCart,
+        refetch: fetchCart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+// ── Hook ──────────────────────────────────────────────────────────────────────
+export function useCart() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used inside <CartProvider>");
+  return ctx;
 }

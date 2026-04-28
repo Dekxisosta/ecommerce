@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react"
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react"
+
 import { useAuth } from "../../auth"
 
 const ProfileContext = createContext(null)
@@ -10,7 +11,17 @@ export function ProfileProvider({ children }) {
   const [loading, setLoading]     = useState(true)
   const [error, setError]         = useState(null)
 
+  const fetchingRef = useRef(false)
+
   const fetchProfile = useCallback(async () => {
+    if (fetchingRef.current) return
+    if (!user) {
+      setProfile(null)
+      setAddresses([])
+      setLoading(false)
+      return
+    }
+    fetchingRef.current = true
     setLoading(true)
     setError(null)
     try {
@@ -25,11 +36,12 @@ export function ProfileProvider({ children }) {
       setError(err.message)
     } finally {
       setLoading(false)
+      fetchingRef.current = false     // 👈 release lock
     }
-  }, [])
+  }, [user])
 
   // fetch on mount and whenever auth user changes
-  useEffect(() => { fetchProfile() }, [fetchProfile, user])
+  useEffect(() => { fetchProfile() }, [fetchProfile])
 
   const updateProfile = async (data) => {
     const res = await fetch("/api/users/me", {

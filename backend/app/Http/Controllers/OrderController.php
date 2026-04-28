@@ -178,7 +178,7 @@ class OrderController extends Controller
                 ProductInventory::where('product_id', $item->product_id)
                     ->decrement('sold', $item->quantity);
             }
-
+            
             return response()->json(['message' => 'Order cancelled successfully!!'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
